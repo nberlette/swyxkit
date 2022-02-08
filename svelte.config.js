@@ -1,10 +1,11 @@
 import preprocess from 'svelte-preprocess';
-import adapter from '@sveltejs/adapter-netlify';
+import adapter from '@svelterun/adapter-auto';
 import { mdsvex } from 'mdsvex';
 import remarkGithub from 'remark-github';
 import remarkAbbr from 'remark-abbr';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import('dotenv').then(({config}) => config());
 
 // mdsvex config
 const mdsvexConfig = {
@@ -20,7 +21,7 @@ const mdsvexConfig = {
 			remarkGithub,
 			{
 				// Use your own repository
-				repository: 'https://github.com/mvasigh/sveltekit-mdsvex-blog.git'
+				repository: process.env.GH_REPO_URL || 'https://github.com/sw-yx/swyxkit.git'
 			}
 		],
 		remarkAbbr
@@ -38,18 +39,18 @@ const mdsvexConfig = {
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	extensions: ['.svelte', '.html', '.svx', ...mdsvexConfig.extensions],
+	extensions: ['.svelte', '.html', ...mdsvexConfig.extensions],
 	preprocess: [
 		mdsvex(mdsvexConfig),
 		preprocess({
-			postcss: true
+			postcss: true,
+			scss: true,
+			typescript: true,
 		})
 	],
 
 	kit: {
-		adapter: adapter({
-			split: false
-		})
+		adapter: adapter(),
 	}
 };
 
