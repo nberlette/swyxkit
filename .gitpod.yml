@@ -2,7 +2,7 @@ image: nberlette/gitpod-enhanced:latest
 
 tasks:
   - before: pnpm install
-    init: pnpm add --global miniflare@next wrangler@beta pnpm prisma tsm typescript tslib @types/node >/dev/null 2>&1
+    init: pnpm add --global tsm typescript tslib @types/node >/dev/null 2>&1
     command: pnpm run dev
 ports:
   - port: 3000-5000
@@ -23,10 +23,6 @@ gitConfig:
   commit.gpgsign: "true"
   tag.gpgsign: "true"
   init.defaultBranch: "main"
-  github.user: "svelterun"
-  user.name: "Nicholas Berlette"
-  user.email: nick@berlette.com
-  user.signingkey: 1be520a6
   alias.amend: "!git log -n 1 --pretty=tformat:%s%n%n%b | git commit -F - --amend"
   alias.log-g: "!git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
   alias.log-v: "!git log -n 1 -p --format=fuller"
@@ -68,5 +64,4 @@ vscode:
     - eg2.vscode-npm-script
     - christian-kohler.npm-intellisense
     - christian-kohler.path-intellisense
-    - voorjaar.windicss-intellisense
     - mrmlnc.vscode-scss
