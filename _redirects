@@ -1,5 +1,5 @@
-/rss.xml /api/rss.xml
-/feed /api/rss.xml
-/rss /api/rss.xml
+/rss.xml /api/rss.xml 307
+/feed /api/rss.xml 307
+/rss /api/rss.xml 307
 
 # read docs for more https://docs.netlify.com/routing/redirects/

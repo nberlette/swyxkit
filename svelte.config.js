@@ -8,10 +8,7 @@ const config = {
 	extensions: ['.svelte', '.html', ...mdsvexConfig.extensions],
 	preprocess: [
 		mdsvex(mdsvexConfig),
-		preprocess({
-			postcss: true,
-			typescript: true,
-		})
+		preprocess({postcss: true})
 	],
 
 	kit: {

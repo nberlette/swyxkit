@@ -35,14 +35,14 @@
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"lint:check": "npm run check",
 		"lint:eslint": "eslint --ignore-path .prettierignore src/**/*",
-		"format:eslint": "eslint --ignore-path .prettierignore src/**/*",
+		"format:eslint": "eslint --ignore-path .prettierignore --fix src/**/*",
 		"lint:prettier": "prettier --check --plugin-search-dir=. src/**/*",
 		"format:prettier": "prettier --write --plugin-search-dir=. src/**/*",
 		"lint": "run-s lint:*",
 		"format": "run-s format:*"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^1.0.0-next.18",
+		"@sveltejs/adapter-auto": "npm:@svelterun/adapter-auto@^1.0.0-next.2",
 		"@sveltejs/kit": "^1.0.0-next.260",
 		"@tailwindcss/typography": "^0.5.0",
 		"@types/node": "^17.0.16",
