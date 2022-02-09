@@ -1,0 +1,8 @@
+# https://developers.cloudflare.com/pages/platform/headers
+# values based on the original file swyxkit/netlify.toml
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: "1; mode=block"
+  Referrer-Policy: no-referrer
+  Cache-Control: "public, max-age=4000, s-maxage=4000, stale-while-revalidate=60"
+  Content-Security-Policy: "default-src 'self'; script-src 'nonce-swyx'; img-src *"

@@ -2,7 +2,7 @@ image: nberlette/gitpod-enhanced:latest
 
 tasks:
   - before: pnpm install
-    init: pnpm add --global tsm typescript tslib @types/node >/dev/null 2>&1
+    init: pnpm add --global miniflare@next wrangler@beta cron-scheduler tsm typescript tslib @types/node >/dev/null 2>&1
     command: pnpm run dev
 ports:
   - port: 3000-5000
@@ -23,11 +23,9 @@ gitConfig:
   commit.gpgsign: "true"
   tag.gpgsign: "true"
   init.defaultBranch: "main"
-  alias.amend: "!git log -n 1 --pretty=tformat:%s%n%n%b | git commit -F - --amend"
-  alias.log-g: "!git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
-  alias.log-v: "!git log -n 1 -p --format=fuller"
+  # alias.amend: "!git log -n 1 --pretty=tformat:%s%n%n%b | git commit -F - --amend"
   core.excludesfile: "~/.gitconfig"
-  color.ui: auto
+  color.ui: "auto"
   color.branch.current: "yellow reverse"
   color.branch.local: "yellow"
   color.branch.remote: "green"
@@ -43,12 +41,13 @@ gitConfig:
   bash.showuntrackedfiles: "1"
   bash.showupstream: ""
   bash.showcolorhints: "true"
-  init.defaultbranch: main
+  init.defaultbranch: "main"
   url.https://github.com.insteadOf: "github:"
   url.https://github.com/.insteadOf: "gh:"
   url.https://gist.github.com/.insteadOf: "gist:"
   url.https://gitlab.com.insteadOf: "gitlab:"
   url.https://gitlab.com/.insteadOf: "gl:"
+
 vscode:
   extensions:
     - svelte.vscode-svelte
