@@ -16,8 +16,10 @@ export const API_URL = _.API_URL || createApiUrl(GH_USER_REP0, 100);
 export const SITE_TITLE = (_.SITE_TITLE || 'SwyxKit');
 export const SITE_DESCRIPTION = _.SITE_DESCRIPTION || "swyx's default SvelteKit + Tailwind starter";
 export const SITE_KEYWORDS = _.SITE_KEYWORDS || "swyxkit,sveltekit,svelte,nberlette,swyx,blog,starter,tailwindcss,cloudflare,netlify,vercel,static";
-
 export const DEFAULT_OG_IMAGE = createOGImageUrl(SITE_TITLE, { icons: ['svelte.svg','tailwindcss.svg'] })
+export const SITE_TWITTER_CARD = 'summary';
+export const SITE_TWITTER_HANDLE = 'nberlette';
+
 
 // social media connections
 export const MY_TWITTER_HANDLE = (_.AUTHOR_TWITTER || 'nberlette');
