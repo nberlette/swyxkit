@@ -1,8 +1,15 @@
 <script context="module">
 	// export const prerender = true; // you can uncomment to prerender as an optimization
 	export const hydrate = true;
-	import { MY_TWITTER_HANDLE, REPO_URL, SITE_URL } from '$lib/siteConfig';
-	import Comments from '../components/Comments.svelte';
+
+	import {
+		MY_TWITTER_HANDLE,
+		REPO_URL,
+		SITE_URL
+	} from '$lib/config/site';
+
+	import Comments from '$lib/components/Comments.svelte';
+
 	export async function load({ url, params, fetch }) {
 		const slug = params.slug;
 		let res = null;
@@ -35,8 +42,8 @@
 
 <script>
 	import 'prism-themes/themes/prism-shades-of-purple.min.css';
-	import Newsletter from '../components/Newsletter.svelte';
-	import Reactions from '../components/Reactions.svelte';
+	import Newsletter from '$lib/components/Newsletter.svelte';
+	import Reactions from '$lib/components/Reactions.svelte';
 
 	/** @type {import('$lib/types').ContentItem} */
 	export let json; // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
@@ -44,21 +51,22 @@
 
 <svelte:head>
 	<title>{json.title}</title>
-	<meta name="description" content="swyxkit blog" />
-
+	<meta name="description" content={json.description} />
+	<meta name="keywords" content={json.tags ? json.tags.join(',') : ''}
 	<link rel="canonical" href={SITE_URL} />
-	<meta property="og:url" content={SITE_URL} />
-	<meta property="og:type" content="article" />
-	<meta property="og:title" content={json.title} />
-	<meta name="Description" content={json.description} />
-	<meta property="og:description" content={json.description} />
+	<meta name="og:url" property="og:url" content={SITE_URL} />
+	<meta name="og:type" property="og:type" content="article" />
+	<meta name="og:title" property="og:title" content={json.title} />
+	<meta name="og:description" property="og:description" content={json.description} />
 	<meta name="twitter:card" content={json.image ? 'summary_large_image' : 'summary'} />
-	<meta name="twitter:creator" content={'@' + MY_TWITTER_HANDLE} />
+	<meta name="twitter:creator" content={'@' + MY_TWITTER_HANDLE.replace(/^[@]/g, '')} />
+	<meta name="twitter:site" content={'@' + MY_TWITTER_HANDLE.replace(/^[@]/g, '')} />
 	<meta name="twitter:title" content={json.title} />
 	<meta name="twitter:description" content={json.description} />
 	{#if json.image}
-		<meta property="og:image" content={json.image} />
+		<meta name="og:image" property="og:image" content={json.image} />
 		<meta name="twitter:image" content={json.image} />
+		<meta name="twitter:image:src" content={json.image} />
 	{/if}
 </svelte:head>
 

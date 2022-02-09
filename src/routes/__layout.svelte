@@ -1,10 +1,16 @@
 <script context="module">
-	import { MY_TWITTER_HANDLE, MY_YOUTUBE, REPO_URL, SITE_TITLE } from '$lib/siteConfig';
+	import {
+		MY_TWITTER_HANDLE,
+		MY_YOUTUBE,
+		REPO_URL,
+		SITE_TITLE,
+		SWYXKIT_URL
+	} from '$lib/config/site';
 </script>
 
 <script>
 	import '../tailwind.css';
-	import Nav from '../components/Nav.svelte';
+	import Nav from '$lib/components/Nav.svelte';
 </script>
 
 <svelte:head>
@@ -64,8 +70,6 @@
 		</div>
 	</div>
 	<p class="prose px-4 dark:prose-invert sm:px-8">
-		This blog is based on the
-		<a href="https://swyxkit.netlify.app/">swyxkit</a>
-		template.
+		This blog is based on the <a href="{SWYXKIT_URL}/">swyxkit</a> template.
 	</p>
 </footer>

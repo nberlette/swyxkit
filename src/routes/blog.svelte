@@ -3,7 +3,6 @@
 	export async function load({ params, fetch }) {
 		const res = await fetch(`/api/listContent.json`);
 		// alternate strategy https://www.davidwparker.com/posts/how-to-make-an-rss-feed-in-sveltekit
-		// Object.entries(import.meta.glob('./*.md')).map(async ([path, page]) => {
 		if (res.status > 400) {
 			return {
 				status: res.status,
@@ -21,7 +20,7 @@
 </script>
 
 <script>
-	import IndexCard from '../components/IndexCard.svelte';
+	import IndexCard from '$lib/components/IndexCard.svelte';
 
 	export let page;
 	export let list;
@@ -32,35 +31,32 @@
 
 	let inputEl;
 	function focusSearch(e) {
-		if (e.key === '/' && inputEl) inputEl.select();
+		if (e.key == '/' && inputEl) inputEl.select();
 	}
 
 	let isTruncated = items.length > 20;
 	let search;
 	$: list = items
-		.filter((item) => {
-			if (search) {
-				return item.title.toLowerCase().includes(search.toLowerCase());
-			}
-			return true;
-		})
+		.filter(item =>
+			(search ? item.title.toLowerCase().includes(search.toLowerCase()) : true)
+		)
 		.slice(0, isTruncated ? 2 : items.length);
 </script>
 
 <svelte:head>
-	<title>Swyxkit Blog Index</title>
-	<meta name="description" content="Latest Hacker News stories in the {list} category" />
+	<title>Posts in {list} - {SITE_TITLE}</title>
+	<meta name="description" content="Posts in the {list} category" />
 </svelte:head>
 
 <svelte:window on:keyup={focusSearch} />
 
 <section class="mx-auto mb-16 flex max-w-2xl flex-col items-start justify-center px-4 sm:px-8">
 	<h1 class="mb-4 text-3xl font-bold tracking-tight text-black dark:text-white md:text-5xl">
-		Blog
+		{BLOG_TITLE}
 	</h1>
 	<p class="mb-4 text-gray-600 dark:text-gray-400">
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum sunt reprehenderit alias rerum
-		dolor impedit. In total, I've written {items.length} articles on my blog. Use the search below to
+		{BLOG_DESCRIPTION}
+		In total, I've written {items.length} articles on my blog. Use the search below to
 		filter by title.
 	</p>
 	<div class="relative mb-4 w-full">
@@ -90,13 +86,13 @@
 			Most Popular
 		</h3>
 		<IndexCard href="/foo" title="Hardcoded Blogpost # 1" stringData="106,255 views">
-			Just a hardcorded blogpost or you can use the metadata up to you
+			Just a hard-coded blog post. Edit in src/routes/blog.svelte, or use the metadata.
 		</IndexCard>
 		<IndexCard href="/welcome" title="Welcome to Swyxkit" stringData="106,255 views">
-			Just a hardcorded blogpost or you can use the metadata up to you
+			Hard-coded link to the Welcome page.
 		</IndexCard>
 		<IndexCard href="/moo" title="Hardcoded Blogpost # 3" stringData="106,255 views">
-			Just a hardcorded blogpost or you can use the metadata up to you
+			Another hard-coded post :)
 		</IndexCard>
 
 		<h3 class="mt-8 mb-4 text-2xl font-bold tracking-tight text-black dark:text-white md:text-4xl">
@@ -136,6 +132,6 @@
 		</div>
 		<button class="p-2 bg-slate-500" on:click={() => (search = '')}>Clear your search</button>
 	{:else}
-		<div class="prose dark:prose-invert">No blogposts found!</div>
+		<div class="prose dark:prose-invert">No blog posts found!</div>
 	{/if}
 </section>

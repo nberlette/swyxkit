@@ -4,32 +4,42 @@
 		REPO_URL,
 		SITE_TITLE,
 		SITE_DESCRIPTION,
+		SITE_KEYWORDS,
 		DEFAULT_OG_IMAGE,
-		MY_TWITTER_HANDLE
-	} from '$lib/siteConfig';
-	export const prerender = true; // index page is most visited, lets prerender
+		MY_TWITTER_HANDLE,
+		SITE_TWITTER_CARD,
+		SITE_TWITTER_HANDLE,
+	} from '$lib/config/site';
+
+	// index page is most visited, lets prerender
+	export const prerender = true;
 </script>
 
 <script>
-	import Newsletter from '../components/Newsletter.svelte';
-	import FeatureCard from '../components/FeatureCard.svelte';
+	import Newsletter from '$lib/components/Newsletter.svelte';
+	import FeatureCard from '$lib/components/FeatureCard.svelte';
 </script>
 
 <svelte:head>
 	<title>{SITE_TITLE}</title>
 	<link rel="canonical" href={SITE_URL} />
 	<link rel="alternate" type="application/rss+xml" href={SITE_URL + '/api/rss.xml'} />
-	<meta property="og:url" content={SITE_URL} />
-	<meta property="og:type" content="article" />
-	<meta property="og:title" content={SITE_TITLE} />
-	<meta name="Description" content={SITE_DESCRIPTION} />
-	<meta property="og:description" content={SITE_DESCRIPTION} />
-	<meta property="og:image" content={DEFAULT_OG_IMAGE} />
-	<meta name="twitter:card" content="summary" />
-	<meta name="twitter:creator" content={'@' + MY_TWITTER_HANDLE} />
+	<meta name="title" content={SITE_TITLE} />
+	<meta name="description" content={SITE_DESCRIPTION} />
+	<meta name="keywords" content={SITE_KEYWORDS || ''}
+	<link rel="canonical" href={SITE_URL} />
+	<meta name="og:url" property="og:url" content={SITE_URL} />
+	<meta name="og:type" property="og:type" content="article" />
+	<meta name="og:title" property="og:title" content={SITE_TITLE} />
+	<meta name="og:description" property="og:description" content={SITE_DESCRIPTION} />
+	<meta name="og:image" property="og:image" content={DEFAULT_OG_IMAGE} />
+	<meta name="twitter:card" content={SITE_TWITTER_CARD || 'summary'} />
+	<meta name="twitter:creator" content={'@' + MY_TWITTER_HANDLE.replace(/^[@]/g, '')} />
+	<meta name="twitter:site" content={'@' + SITE_TWITTER_HANDLE.replace(/^[@]/g, '')} />
 	<meta name="twitter:title" content={SITE_TITLE} />
 	<meta name="twitter:description" content={SITE_DESCRIPTION} />
 	<meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
+	<meta name="twitter:image:src" content={DEFAULT_OG_IMAGE} />
 </svelte:head>
 
 <div
@@ -39,18 +49,14 @@
 		<div class="flex flex-col pr-8">
 			<h1 class="mb-3 text-3xl font-bold tracking-tight text-black dark:text-white md:text-5xl">
 				This is
-
 				<span
-					class="relative ml-2 inline-block before:absolute before:-inset-1 before:block before:-skew-y-3 before:bg-red-500"
-				>
+					class="relative ml-2 inline-block before:absolute before:-inset-1 before:block before:-skew-y-3 before:bg-red-500">
 					<span class="relative skew-y-3 text-yellow-400">{SITE_TITLE}</span>
 				</span>
 				!
 			</h1>
 			<h2 class="mb-4 text-gray-700 dark:text-gray-200">
-				An opinionated blog starter for <span class="font-semibold"
-					>SvelteKit + Tailwind + Netlify.</span
-				> Refreshed for 2022!
+				An opinionated blog starter for <span class="font-semibold">SvelteKit + Tailwind + Netlify.</span> Refreshed for 2022!
 			</h2>
 			<p class="mb-16 text-gray-600 dark:text-gray-400">
 				<a href={REPO_URL}>View source here!</a>
@@ -88,9 +94,8 @@
 					stroke-linejoin="round"
 					stroke-width="2"
 					d="M17.5 12h-15m11.667-4l3.333 4-3.333-4zm3.333 4l-3.333 4 3.333-4z"
-				/></svg
-			></a
-		>
+				/></svg>
+		</a>
 	</section>
 	<Newsletter />
 </div>
