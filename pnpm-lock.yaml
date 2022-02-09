@@ -1,8 +1,8 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@sveltejs/adapter-auto': npm:@svelterun/adapter-auto@^1.0.0-next.2
   '@sveltejs/kit': ^1.0.0-next.260
+  '@svelterun/adapter-auto': ^1.0.0-next.2
   '@tailwindcss/typography': ^0.5.0
   '@types/node': ^17.0.16
   '@typescript-eslint/eslint-plugin': ^4.33.0
@@ -17,7 +17,6 @@ specifiers:
   mdsvex-relative-images: ^1.0.1
   node-fetch: ^2.6.6
   npm-run-all: ^4.1.5
-  parse-link-header: ^2.0.0
   postcss: ^8.4.5
   postcss-load-config: ^3.1.0
   prettier: ~2.2.1
@@ -54,15 +53,14 @@ specifiers:
 dependencies:
   date-fns: 2.28.0
   node-fetch: 2.6.7
-  parse-link-header: 2.0.0
   prism-themes: 1.9.0
   shiki: 0.10.0
   slugify: 1.6.5
   snarkdown: 2.0.0
 
 devDependencies:
-  '@sveltejs/adapter-auto': /@svelterun/adapter-auto/1.0.0-next.2
   '@sveltejs/kit': 1.0.0-next.260_svelte@3.46.4
+  '@svelterun/adapter-auto': 1.0.0-next.2
   '@tailwindcss/typography': 0.5.1_tailwindcss@3.0.19
   '@types/node': 17.0.16
   '@typescript-eslint/eslint-plugin': 4.33.0_959502c0ea240e86d4d2ba8b8c0fee45
@@ -2130,12 +2128,6 @@ packages:
       lines-and-columns: 1.2.4
     dev: true
 
-  /parse-link-header/2.0.0:
-    resolution: {integrity: sha512-xjU87V0VyHZybn2RrCX5TIFGxTVZE6zqqZWMPlIKiSKuWh/X5WZdt+w1Ki1nXB+8L/KtL+nZ4iq+sfI6MrhhMw==}
-    dependencies:
-      xtend: 4.0.2
-    dev: false
-
   /path-is-absolute/1.0.1:
     resolution: {integrity: sha1-F0uSaHNVNP+8es5r9TpanhtcX18=}
     engines: {node: '>=0.10.0'}
@@ -3262,6 +3254,7 @@ packages:
   /xtend/4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
     engines: {node: '>=0.4'}
+    dev: true
 
   /yallist/4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
