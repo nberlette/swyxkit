@@ -23,7 +23,7 @@
 		rel="alternate"
 		type="application/rss+xml"
 		title={'RSS Feed for ' + SITE_TITLE}
-		href="/api/rss.xml"
+		href="/rss.xml"
 	/>
 	<meta name="theme-color" content="#facc15" media="(prefers-color-scheme: light)" />
 	<meta name="theme-color" content="#3730a3" media="(prefers-color-scheme: dark)" />

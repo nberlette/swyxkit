@@ -3,11 +3,11 @@
 	// export const prerender = true; // turned off so it refreshes quickly
 
 	export async function load({ fetch }) {
-		const res = await fetch(`/api/listContent.json`);
+		const res = await fetch(`/api/blog.json`);
 		if (res.status > 400) {
 			return {
 				status: res.status,
-				error: 'No worky'
+				error: 'Problem fetching posts.'
 			};
 		}
 
@@ -32,7 +32,7 @@
 
 	let inputEl;
 	function focusSearch(e) {
-		if (e.key == '/' && inputEl) inputEl.select();
+		if (e.key === '/' && inputEl) inputEl.select();
 	}
 
 	let isTruncated = items.length > 20;
@@ -45,7 +45,7 @@
 </script>
 
 <svelte:head>
-	<title>{list !== '' ? 'Posts in ' + list : BLOG_TITLE} - {SITE_TITLE}</title>
+	<title>{list !== '' ? 'Posts in ' + list.t : BLOG_TITLE} - {SITE_TITLE}</title>
 	<meta name="description" content="Posts in the {list ?? BLOG_TITLE} category" />
 </svelte:head>
 

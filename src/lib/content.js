@@ -1,19 +1,13 @@
 // @ts-nocheck
-import {compile} from 'mdsvex';
-import {dev} from '$app/env';
+import {dev, browser} from '$app/env';
 import {
 	GH_TOKEN,
-	GH_USER_REPO,
-	BASE_URL,
-	SITE_URL,
 	API_URL,
 	ALLOWED_AUTHORS,
 	LABELS_PUBLISHED,
-	LABELS_DRAFT,
 	SITE_TITLE,
 } from '$lib/config/site';
-import { createApiUrl, createOGImageUrl, safeDisplayToken } from '$lib/utils';
-
+import {createOGImageUrl, safeDisplayToken} from '$lib/utils';
 import grayMatter from 'gray-matter';
 import fetch from 'node-fetch';
 import parse from 'parse-link-header';
@@ -22,11 +16,20 @@ import rehypeStringify from 'rehype-stringify';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutoLink from 'rehype-autolink-headings';
 
+const compile = (browser && !dev)
+	? import('mdsvex/dist/browser-es.js')
+			.then(m => m.compile)
+	: import('mdsvex/dist/main.es.js')
+			.then(m => m.compile);
+
 const remarkPlugins = undefined;
 const rehypePlugins = [
 	[rehypeStringify],
 	[rehypeSlug],
-	[rehypeAutoLink, { behavior: 'wrap', properties: {class:'hover:text-yellow-100 no-underline'} }]
+	[rehypeAutoLink, {
+		behavior: 'wrap',
+		properties: { class: 'hover:text-yellow-100 no-underline' }
+	}]
 ];
 
 const allowedPosters = [...ALLOWED_AUTHORS];
@@ -34,12 +37,11 @@ const publishedTags = [...LABELS_PUBLISHED];
 
 let allBlogposts = [];
 // let etag = null // todo - implmement etag header
-``;
-export async function listContent() {
+export async function listContent(omitContent = false) {
 	// use a diff var so as to not have race conditions while fetching
 	// TODO: make sure to handle this better when doing etags or cache restore
 
-	/** @type {import('./types').ContentItem[]} */
+	/** @type {import('$lib/types').ContentItem[]} */
 	let _allBlogposts = [];
 	let next = null;
 	let limit = 0; // just a failsafe against infinite loop - feel free to remove
@@ -57,22 +59,24 @@ export async function listContent() {
 		const issues = await res.json();
 		if ('message' in issues && res.status > 400)
 			throw new Error(res.status + ' ' + res.statusText + '\n' + (issues && issues.message));
-		issues.forEach(
+		
+		_allBlogposts = issues.reduce(
 			/** @param {import('$lib/types').GithubIssue} issue */
-			(issue) => {
+			(posts, issue) => {
 				if (
 					issue.labels.some((label) => publishedTags.includes(label.name)) &&
 					allowedPosters.includes(issue.user.login)
 				) {
-					_allBlogposts.push(parseIssue(issue));
+					return [...posts, parseIssue(issue, omitContent)];
 				}
-			}
+				return posts;
+			}, []
 		);
 		const headers = parse(res.headers.get('Link'));
 		next = headers && headers.next;
 	} while (next && limit++ < 1000); // just a failsafe against infinite loop - feel free to remove
 	 // use valueOf to make TS happy https://stackoverflow.com/a/60688789/1106414
-	_allBlogposts.sort((a, b) => b.date.valueOf() - a.date.valueOf());
+	_allBlogposts.sort((a, b) => +b.date - +a.date);
 	allBlogposts = _allBlogposts;
 	return _allBlogposts;
 }
@@ -90,7 +94,8 @@ export async function getContent(slug) {
 	}
 	if (!allBlogposts.length) throw new Error('no blogposts');
 	// find the blogpost that matches this slug
-	const blogpost = allBlogposts.find((post) => post.slug.toLowerCase() === slug.toLowerCase());
+	const blogpost = allBlogposts
+		.find(post => post.slug.toLowerCase() === slug.toLowerCase());
 	if (blogpost) {
 		// compile it with mdsvex
 		const content = (
@@ -110,20 +115,17 @@ export async function getContent(slug) {
 }
 
 /**
- * @param {import('./types').GithubIssue} issue
- * @returns {import('./types').ContentItem}
+ * @param {import('$lib/types').GithubIssue} issue
+ * @returns {import('$lib/types').ContentItem}
  */
-function parseIssue(issue) {
+function parseIssue(issue, omitContent = false) {
 	const src = issue.body;
-	const { content, data } = grayMatter(src);
+	const { content, data } = omitContent
+		? { content: '', data: grayMatter(src).data }
+		: grayMatter(src);
 	let title = data.title ?? issue.title;
-	let slug;
-	if (data.slug) {
-		slug = data.slug;
-	} else {
-		slug = slugify(title);
-	}
-	let description = data.description || data.excerpt || content.trim().split('\n')[0];
+	let slug = data.slug ?? slugify(title);
+	let description = data.description ?? data.excerpt ?? content.trim().split('\n')[0];
 	// you may wish to use a truncation approach like this instead...
 	// let description = (data.content.length > 300) ? data.content.slice(0, 300) + '...' : data.content
 
@@ -143,7 +145,7 @@ function parseIssue(issue) {
 		category: data.category,
 		tags,
 		image: data.image ?? data.cover_image ?? createOGImageUrl(`# ${title}\n## ${SITE_TITLE}`, {
-			icons: data.image_icons ?? data.icons ?? ['svelte.svg', 'tailwindcss.svg'],
+			icons: data.image_icons ?? data.icons ?? ['svelte.svg','tailwindcss.svg'],
 			fontSize: 48,
 			code: false
 		}),

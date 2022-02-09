@@ -1,8 +1,19 @@
 {
 	"compilerOptions": {
+		"strict": false,
+		"noUnusedLocals": false,
+		"noImplicitAny": false,
+		"noImplicitOverride": false,
+		"noImplicitThis": false,
+		"noImplicitReturns": false,
+		"allowUnusedLabels": true,
+		"allowSyntheticDefaultImports": true,
+		"allowUnreachableCode": false,
+		"suppressImplicitAnyIndexErrors": true,
+		"suppressExcessPropertyErrors": true,
 		"moduleResolution": "node",
 		"module": "es2020",
-		"lib": ["es2020"],
+		"lib": ["es2020", "WebWorker", "dom"],
 		"target": "es2019",
 		"isolatedModules": true,
 		"resolveJsonModule": true,
@@ -12,17 +23,19 @@
 		"forceConsistentCasingInFileNames": true,
 		"baseUrl": ".",
 		"allowJs": true,
-		"checkJs": false,
+		"checkJs": true,
 		"paths": {
-			"$lib/*": ["src/lib/*"]
-		}
+			"$lib/*": ["./src/lib/*", "./src/*.d.ts"]
+		},
+		"noEmitOnError": true,
+		"noEmit": true,
+		"types": ["node"]
 	},
 	"include": [
-		"src/**/*.d.ts",
+		"functions/**/*",
 		"src/**/*.js",
 		"src/**/*.ts",
-		"src/**/*.svelte",
-		"src/lib/content.js",
-		"src/lib/types.d.ts"
+		"src/**/*.d.ts",
+		"src/**/*.svelte"
 	]
 }

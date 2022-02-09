@@ -1,9 +1,13 @@
 import {createApiUrl, createOGImageUrl, stringToArray} from '$lib/utils';
 
 export const GH_TOKEN = process.env.GH_TOKEN;
+
 export const ALLOWED_AUTHORS = stringToArray(process.env.ALLOWED_AUTHORS ?? 'nberlette,sw-yx');
 export const LABELS_PUBLISHED = stringToArray(process.env.LABELS_PUBLISHED ?? 'Published,Active');
 export const LABELS_DRAFT = stringToArray(process.env.LABELS_DRAFT ?? 'Draft,Unpublished');
+
+export const CACHE_MAXAGE_RSS = 60 * 10; // 10 minutes
+export const CACHE_MAXAGE_API = 60 * 5;  // 5 minutes
 
 export const SWYXKIT_URL = 'https://swyxkit.netlify.app/';
 export const BASE_URL = new URL(process.env.BASE_URL ?? process.env.SITE_URL ?? 'https://swyxkit.pages.dev')

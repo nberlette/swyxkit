@@ -23,7 +23,7 @@
 <svelte:head>
 	<title>{SITE_TITLE}</title>
 	<link rel="canonical" href={SITE_URL} />
-	<link rel="alternate" type="application/rss+xml" href={SITE_URL + '/api/rss.xml'} />
+	<link rel="alternate" type="application/rss+xml" href={SITE_URL + '/rss.xml'} />
 	<meta name="title" content={SITE_TITLE} />
 	<meta name="description" content={SITE_DESCRIPTION} />
 	<meta name="keywords" content={SITE_KEYWORDS || ''} />
