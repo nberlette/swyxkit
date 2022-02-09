@@ -41,10 +41,9 @@
 </script>
 
 <script>
+	import 'prism-themes/themes/prism-shades-of-purple.min.css'
 	import Newsletter from '$lib/components/Newsletter.svelte';
 	import Reactions from '$lib/components/Reactions.svelte';
-	import { PRISM_THEME } from '$lib/config/site';
-	import('prism-themes/themes/'+PRISM_THEME+'.min.css')
 
 	/** @type {import('$lib/types').ContentItem} */
 	export let json, slug; // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates

@@ -1,8 +1,8 @@
 // @ts-nocheck
-import {config} from 'dotenv';
-const env = config();
+import {dev} from '$app/env';
+var env = {...import.meta.env, ...process.env}
 
 /**
  * @type {{[key: string]: string}}
  */
-export default { ...env, ...import.meta.env, ...process.env };
+export default env;

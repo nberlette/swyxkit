@@ -49,16 +49,16 @@
 	<meta name="description" content="Posts in the {list ?? BLOG_TITLE} category" />
 </svelte:head>
 
-<svelte:window on:keyup={focusSearch} />
+<svelte:window on:keydown|preventDefault={({key}) => 
+	(key === '/') && inputEl?.focus()} />
 
 <section class="mx-auto mb-16 flex max-w-2xl flex-col items-start justify-center px-4 sm:px-8">
 	<h1 class="mb-4 text-3xl font-bold tracking-tight text-black dark:text-white md:text-5xl">
 		{BLOG_TITLE}
 	</h1>
 	<p class="mb-4 text-gray-600 dark:text-gray-400">
-		{BLOG_DESCRIPTION}
-		In total, I've written {items.length} articles on my blog. Use the search below to
-		filter by title.
+		{BLOG_DESCRIPTION && (BLOG_DESCRIPTION + '<br><br>')}
+		In total, I{"'"}ve written {items.length} articles. Search below to filter by title.
 	</p>
 	<div class="relative mb-4 w-full">
 		<input
@@ -67,7 +67,7 @@
 			bind:value={search}
 			bind:this={inputEl}
 			placeholder="Hit / to search"
-			class="block w-full rounded-md border border-gray-200 bg-white px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100"
+			class="block w-full rounded-md border border-gray-200 bg-white px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100 transition-colors duration-300"
 		/><svg
 			class="absolute right-3 top-3 h-5 w-5 text-gray-400 dark:text-gray-300"
 			xmlns="http://www.w3.org/2000/svg"
