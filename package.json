@@ -27,7 +27,7 @@
 		"build:vercel": "VERCEL=1 svelte-kit build",
 		"build:static": "STATIC=1 svelte-kit build",
 		"build:node": "NODE=1 svelte-kit build",
-		"build": "svelte-kit build:pages",
+		"build": "svelte-kit build",
 		"dev": "svelte-kit dev --port ${PORT:-3000}",
 		"start": "svelte-kit dev --port ${PORT:-3000}",
 		"preview": "svelte-kit preview --port ${PORT:-3000}",
