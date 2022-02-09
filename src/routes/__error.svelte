@@ -1,8 +1,8 @@
 <script context="module">
 	/** @type {import('@sveltejs/kit').ErrorLoad} */
-	export function load({ url, error, status }) {
+	export function load({ url, error, status, stuff }) {
 		return {
-			props: { error, status, url }
+			props: { error, status, url, stuff }
 		};
 	}
 </script>
@@ -10,19 +10,25 @@
 <script>
 	// import Nav from '../components/Nav.svelte';
 	import { dev } from '$app/env';
+	import { EMAIL, EMAIL_URL } from '$lib/config/site';
 
-	export let url;
-	export let status;
+	export let url, status;
+	/** @type {Error} */
 	export let error;
 
-	const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
+	const offline = typeof (navigator) !== 'undefined' && (navigator.onLine === false);
 
-	let message = offline ? 'Find the internet and try again' : error?.message;
+	let message = offline ? 'Find the internet and try again' : (error.message || error.toString());
+	let title = `Error ${offline ? '- no internet!' : status}`;
 
-	let title = offline ? 'Offline' : status;
 	if (status === 404) {
 		title = 'Page not found :(';
-		message = 'Sorry! If you think this URL is broken, please let me know!';
+		message = 'Sorry! If you think this URL is broken, please let me know.';
+	} else if (status === 500) {
+		title = 'Internal Server Error!';
+		message = `Uh oh... Looks like I broke something on my end, 
+and now it's messing up things on your end. Please contact me 
+so I can fix it. Sorry!`;
 	}
 </script>
 
@@ -31,12 +37,12 @@
 </svelte:head>
 
 <section class="container prose mx-auto py-12 dark:prose-invert">
-	<h1>{status}: {title}</h1>
+	<h1>{title}</h1>
 
 	{#if status === 404}
-		<p class="">There is no post at the slug <code>{url.pathname}</code>.</p>
-		<p><a href={'/ideas/?filter=' + url.pathname.slice(1)}>Try searching for it here!</a></p>
-		<p class="">If you believe this was a bug, please let me know! Email swyx [at] swyx.io</p>
+		<p class="text-lg">There is no post at the slug <code>{url.pathname}</code>.</p>
+		<p><a href={'/blog/?filter=' + url.pathname.slice(1)}>Try searching for it here!</a></p>
+		<p class="text-md">If you believe this was a bug, please let me know! <a href={EMAIL_URL} target="_blank" rel="noopener noreferrer">{EMAIL.replace(/[@]/g, ' [at] ')}</a></p>
 	{:else}
 		<p class="font-mono">{message}</p>
 	{/if}

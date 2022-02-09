@@ -1,10 +1,8 @@
 // @ts-nocheck
-(async () => await import('dotenv')
-  .then(({config}) => config())
-);
+import {config} from 'dotenv';
+const env = config();
 
 /**
  * @type {{[key: string]: string}}
  */
-export const env = {...import.meta.env, ...process.env};
-export default env;
+export default { ...env, ...import.meta.env, ...process.env };

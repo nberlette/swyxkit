@@ -11,6 +11,7 @@ export type ContentItem = {
 	tags: string[];
 	image: string;
 	canonical: string;
+	author: GHUser;
 	slug: string;
 	date: Date;
 	ghMetadata: GHMetadata;
@@ -19,11 +20,7 @@ export type ContentItem = {
 export type GHMetadata = {
 	issueUrl: string;
 	commentsUrl: string;
-	title: string;
-	created_at: Date;
-	updated_at: Date;
-	reactions: GHReactions;
-};
+} & Omit<GithubIssue, 'body' | 'html_url' | 'comments_url'>;
 
 export type GHReactions = {
 	total_count: number;

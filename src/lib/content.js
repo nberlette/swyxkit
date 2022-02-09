@@ -10,8 +10,9 @@ import {
 	ALLOWED_AUTHORS,
 	LABELS_PUBLISHED,
 	LABELS_DRAFT,
+	SITE_TITLE,
 } from '$lib/config/site';
-import { createApiUrl, safeDisplayToken } from '$lib/utils';
+import { createApiUrl, createOGImageUrl, safeDisplayToken } from '$lib/utils';
 
 import grayMatter from 'gray-matter';
 import fetch from 'node-fetch';
@@ -57,7 +58,7 @@ export async function listContent() {
 		if ('message' in issues && res.status > 400)
 			throw new Error(res.status + ' ' + res.statusText + '\n' + (issues && issues.message));
 		issues.forEach(
-			/** @param {import('./types').GithubIssue} issue */
+			/** @param {import('$lib/types').GithubIssue} issue */
 			(issue) => {
 				if (
 					issue.labels.some((label) => publishedTags.includes(label.name)) &&
@@ -129,7 +130,7 @@ function parseIssue(issue) {
 	/** @type {string[]} */
 	let tags = [];
 	if (data.tags) tags = Array.isArray(data.tags) ? data.tags : [data.tags];
-	tags = tags.map((tag) => tag.toLowerCase());
+	tags = tags.map(tag => tag.toLowerCase());
 	// console.log(slug, tags);
 
 	return {
@@ -141,14 +142,20 @@ function parseIssue(issue) {
 		description,
 		category: data.category,
 		tags,
-		image: data.image ?? data.cover_image,
+		image: data.image ?? data.cover_image ?? createOGImageUrl(`# ${title}\n## ${SITE_TITLE}`, {
+			icons: data.image_icons ?? data.icons ?? ['svelte.svg', 'tailwindcss.svg'],
+			fontSize: 48,
+			code: false
+		}),
 		canonical: data.canonical, // for canonical URLs of something published elsewhere
 		slug: slug.toLowerCase(),
 		date: new Date(data.date ?? issue.created_at),
+		author: issue.user,
 		ghMetadata: {
 			issueUrl: issue.html_url,
 			commentsUrl: issue.comments_url,
 			title: issue.title,
+			labels: issue.labels,
 			created_at: issue.created_at,
 			updated_at: issue.updated_at,
 			reactions: issue.reactions

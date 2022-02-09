@@ -26,7 +26,7 @@
 	<link rel="alternate" type="application/rss+xml" href={SITE_URL + '/api/rss.xml'} />
 	<meta name="title" content={SITE_TITLE} />
 	<meta name="description" content={SITE_DESCRIPTION} />
-	<meta name="keywords" content={SITE_KEYWORDS || ''}
+	<meta name="keywords" content={SITE_KEYWORDS || ''} />
 	<link rel="canonical" href={SITE_URL} />
 	<meta name="og:url" property="og:url" content={SITE_URL} />
 	<meta name="og:type" property="og:type" content="article" />

@@ -29,7 +29,7 @@ function createApiUrl(repo = GH_USER_REPO, per_page = 100) {
  * @param {{[key: string]: any}} options
  * @returns {string}
  */
-function createOGImageUrl(title = SITE_TITLE, {
+function createOGImageUrl(title, {
   icons = ['svelte.svg', 'tailwindcss.svg'],
   iconSize = 300,
   fontSize = 120,
@@ -45,13 +45,13 @@ function createOGImageUrl(title = SITE_TITLE, {
     .replace(/([<>\[\]/:;{}()#\s ]+|[^a-z0-9-_]+)/ig, ent =>
       encodeURIComponent(ent));
 
-  const styles = `<style>code{color:${foreground};text-shadow:0 0.1em 0 ${shadowColor}}svg,img{filter:drop-shadow(0 0.1em 0 ${shadowColor})}img:first-child,.plus,code::before,code::after{display:none}html,body{background:${background} linear-gradient(40deg, ${gradientFrom} 0%, ${gradientTo} 150%)}</style>`;
+  const styles = `<style>code,h1,h2,h3,h4,h5{color:${foreground};text-shadow:0 0.1em 0 ${shadowColor}}svg,img{filter:drop-shadow(0 0.1em 0 ${shadowColor})}img:first-child,.plus,code::before,code::after{display:none}html,body{background:${background} linear-gradient(40deg, ${gradientFrom} 0%, ${gradientTo} 150%);line-height:0.95}</style>`;
   const iconsString = icons.map(icon =>
     `images=${euc(
       new URL(icon.startsWith('http') ? icon : 'https://icns.ml/' + icon).href
-    )}&widths=${iconSize}&widths=${iconSize}`).join('&');
+    )}&widths=${iconSize}&heights=${iconSize}`).join('&');
 
-  return ('https://og-image.vercel.app/' + euc(`${(code ? '**<code>'+title+'</code>**' : '**'+title+'**') + styles}`) + `.png?md=1&images=https%3A%2F%2Fassets.vercel.com&heights=0&widths=0&fontSize=${fontSize}px&theme=${theme}&${iconsString}`);
+  return ('https://og-image.vercel.app/' + euc(`${(code ? '<code>'+title+'</code>' : title) + styles}`) + `.png?md=1&images=https%3A%2F%2Fassets.vercel.com&heights=0&widths=0&fontSize=${fontSize}px&theme=${theme}&${iconsString}`);
 }
 
 /**

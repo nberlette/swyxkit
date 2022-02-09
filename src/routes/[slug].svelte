@@ -8,7 +8,6 @@
 		REPO_URL,
 		SITE_URL
 	} from '$lib/config/site';
-
 	import Comments from '$lib/components/Comments.svelte';
 
 	export async function load({ url, params, fetch }) {
@@ -35,33 +34,34 @@
 			console.error('error fetching blog post at [slug].svelte: ' + slug, res, err);
 			return {
 				status: 500,
-				error: new Error('error fetching blog post at [slug].svelte: ' + slug + ': ' + res)
+				error: new Error('error fetching blog post "' + slug + '": ' + res)
 			};
 		}
 	}
 </script>
 
 <script>
-	import 'prism-themes/themes/prism-shades-of-purple.min.css';
 	import Newsletter from '$lib/components/Newsletter.svelte';
 	import Reactions from '$lib/components/Reactions.svelte';
+	import { PRISM_THEME } from '$lib/config/site';
+	import('prism-themes/themes/'+PRISM_THEME+'.min.css')
 
 	/** @type {import('$lib/types').ContentItem} */
-	export let json; // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
+	export let json, slug; // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
 </script>
 
 <svelte:head>
 	<title>{json.title}</title>
 	<meta name="description" content={json.description} />
-	<meta name="keywords" content={json.tags ? json.tags.join(',') : ''}
-	<link rel="canonical" href={SITE_URL} />
+	<meta name="keywords" content={json.tags ? json.tags.join(',') : ''} />
+	<link rel="canonical" href={new URL(slug, SITE_URL).href} />
 	<meta name="og:url" property="og:url" content={SITE_URL} />
 	<meta name="og:type" property="og:type" content="article" />
 	<meta name="og:title" property="og:title" content={json.title} />
 	<meta name="og:description" property="og:description" content={json.description} />
 	<meta name="twitter:card" content={json.image ? 'summary_large_image' : 'summary'} />
 	<meta name="twitter:creator" content={'@' + MY_TWITTER_HANDLE.replace(/^[@]/g, '')} />
-	<meta name="twitter:site" content={'@' + MY_TWITTER_HANDLE.replace(/^[@]/g, '')} />
+	<meta name="twitter:site" content={'@' + SITE_TWITTER_HANDLE.replace(/^[@]/g, '')} />
 	<meta name="twitter:title" content={json.title} />
 	<meta name="twitter:description" content={json.description} />
 	{#if json.image}
@@ -73,19 +73,23 @@
 
 <article
 	class="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center px-4 sm:px-8"
+	itemtype="post"
 >
-	<h1 class="mb-8 text-3xl font-bold tracking-tight text-black dark:text-white md:text-5xl ">
+	<h1 class="mb-8 text-3xl font-bold tracking-tight text-black dark:text-white md:text-5xl" itemprop="title" itemtype="title">
 		{json.title}
 	</h1>
 	<div
 		class="bg mt-2 flex w-full justify-between sm:flex-col sm:items-start md:flex-row md:items-center"
 	>
-		<p class="flex items-center text-sm text-gray-700 dark:text-gray-300">swyx</p>
+		<p class="flex items-center text-sm text-gray-700 dark:text-gray-300 space-around gap-1">
+			<figure class="avatar w-4 h-4 rounded-full border-[2px] text-[#fffa] hover:text-white transition-colors duration-500 overflow-hidden shadow-sm"><img src={json.author.avatar_url} alt={json.author.login} /></figure>
+			<span class="author" itemprop="author">{json.author.login}</span>
+		</p>
 		<p class="min-w-32 flex items-center text-sm text-gray-600 dark:text-gray-400 md:mt-0">
-			<a href={json.ghMetadata.issueUrl} rel="external" class="no-underline" target="_blank">
-				<span class="mr-4 font-mono text-xs text-gray-700 text-opacity-70 dark:text-gray-300"
-					>{json.ghMetadata.reactions.total_count} reactions</span
-				>
+			<a href={json.ghMetadata.issueUrl} rel="external noopener noreferrer" class="no-underline" target="_blank">
+				<span class="mr-4 font-mono text-xs text-gray-700 text-opacity-70 dark:text-gray-300">
+					{json.ghMetadata.reactions.total_count} reactions
+				</span>
 			</a>
 			{new Date(json.date).toISOString().slice(0, 10)}
 		</p>

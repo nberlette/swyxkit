@@ -1,12 +1,13 @@
 <script context="module">
+	// @ts-nocheck
 	// export const prerender = true; // turned off so it refreshes quickly
-	export async function load({ params, fetch }) {
+
+	export async function load({ fetch }) {
 		const res = await fetch(`/api/listContent.json`);
-		// alternate strategy https://www.davidwparker.com/posts/how-to-make-an-rss-feed-in-sveltekit
 		if (res.status > 400) {
 			return {
 				status: res.status,
-				error: await res.text()
+				error: 'No worky'
 			};
 		}
 
@@ -14,15 +15,15 @@
 		const items = await res.json();
 		return {
 			props: { items },
-			maxage: 60 // 1 minute
+			maxage: 60,
 		};
 	}
 </script>
 
 <script>
+	import { SITE_TITLE, BLOG_TITLE, BLOG_DESCRIPTION, SITE_URL } from '$lib/config/site';
 	import IndexCard from '$lib/components/IndexCard.svelte';
 
-	export let page;
 	export let list;
 
 	// technically this is a slighlty different type because doesnt have 'content' but we'll let it slide
@@ -40,12 +41,12 @@
 		.filter(item =>
 			(search ? item.title.toLowerCase().includes(search.toLowerCase()) : true)
 		)
-		.slice(0, isTruncated ? 2 : items.length);
+		.slice(0, isTruncated ? 2 : items?.length ?? 0);
 </script>
 
 <svelte:head>
-	<title>Posts in {list} - {SITE_TITLE}</title>
-	<meta name="description" content="Posts in the {list} category" />
+	<title>{list !== '' ? 'Posts in ' + list : BLOG_TITLE} - {SITE_TITLE}</title>
+	<meta name="description" content="Posts in the {list ?? BLOG_TITLE} category" />
 </svelte:head>
 
 <svelte:window on:keyup={focusSearch} />

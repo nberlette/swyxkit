@@ -3,9 +3,13 @@ node_modules
 /.svelte-kit
 /package
 /build
-/functions
+# /functions
 /static/tailwind.css
 /src/lib/sampledata.json
 
 # Local Netlify folder
 .netlify
+
+.env
+.env.local
+.env.*.local
