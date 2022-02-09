@@ -1,7 +1,7 @@
 <script>
-	import MobileMenu from './MobileMenu.svelte';
-	import { REPO_URL } from '$lib/siteConfig';
-	import NavLink from './NavLink.svelte';
+	import MobileMenu from '$lib/components/MobileMenu.svelte';
+	import { REPO_URL } from '$lib/config/site';
+	import NavLink from '$lib/components/NavLink.svelte';
 	let isDark = false;
 	if (typeof localStorage !== 'undefined') {
 		if (
