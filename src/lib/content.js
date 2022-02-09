@@ -1,15 +1,17 @@
-import { compile } from 'mdsvex';
-import { dev } from '$app/env';
+// @ts-nocheck
+import {compile} from 'mdsvex';
+import {dev} from '$app/env';
 import {
+	GH_TOKEN,
 	GH_USER_REPO,
-	create_api_url,
 	BASE_URL,
 	SITE_URL,
-	ISSUES_API_URL,
+	API_URL,
 	ALLOWED_AUTHORS,
 	LABELS_PUBLISHED,
 	LABELS_DRAFT,
-} from './config/site.js';
+} from '$lib/config/site';
+import { createApiUrl, safeDisplayToken } from '$lib/utils';
 
 import grayMatter from 'gray-matter';
 import fetch from 'node-fetch';
@@ -21,15 +23,9 @@ import rehypeAutoLink from 'rehype-autolink-headings';
 
 const remarkPlugins = undefined;
 const rehypePlugins = [
-	rehypeStringify,
-	rehypeSlug,
-	[
-		rehypeAutoLink,
-		{
-			behavior: 'wrap',
-			properties: { class: 'hover:text-yellow-100 no-underline' }
-		}
-	]
+	[rehypeStringify],
+	[rehypeSlug],
+	[rehypeAutoLink, { behavior: 'wrap', properties: {class:'hover:text-yellow-100 no-underline'} }]
 ];
 
 const allowedPosters = [...ALLOWED_AUTHORS];
@@ -46,12 +42,12 @@ export async function listContent() {
 	let _allBlogposts = [];
 	let next = null;
 	let limit = 0; // just a failsafe against infinite loop - feel free to remove
-	const authheader = process.env.GH_TOKEN && {
-		Authorization: `token ${process.env.GH_TOKEN}`
+	const authheader = GH_TOKEN && {
+		Authorization: `token ${GH_TOKEN}`
 	};
 	do {
 		const res = await fetch(
-			next?.url ?? ISSUES_API_URL,
+			next?.url ?? API_URL,
 			{
 				headers: authheader
 			}
@@ -85,7 +81,7 @@ export async function getContent(slug) {
 	if (dev || allBlogposts.length === 0) {
 		console.log('loading allBlogposts');
 		allBlogposts = await listContent();
-		console.log('loaded ' + allBlogposts.length + ' blogposts');
+		console.log('loaded ' + allBlogposts.length + ' blog posts');
 		if (!allBlogposts.length)
 			throw new Error(
 				'failed to load blogposts for some reason. check token' + safeDisplayToken(process.env.GH_TOKEN)
@@ -126,7 +122,7 @@ function parseIssue(issue) {
 	} else {
 		slug = slugify(title);
 	}
-	let description = data.description ?? content.trim().split('\n')[0];
+	let description = data.description || data.excerpt || content.trim().split('\n')[0];
 	// you may wish to use a truncation approach like this instead...
 	// let description = (data.content.length > 300) ? data.content.slice(0, 300) + '...' : data.content
 

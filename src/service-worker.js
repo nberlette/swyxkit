@@ -2,12 +2,18 @@ import { timestamp, build } from '$service-worker';
 
 const name = `cache-${timestamp}`;
 
-self.addEventListener('install', (event) => {
+/**
+ * Events: Install
+ */
+self.addEventListener('install', event => {
 	// @ts-expect-error
 	event.waitUntil(caches.open(name).then((cache) => cache.addAll(build)));
 });
 
-self.addEventListener('activate', (event) => {
+/**
+ * Events: Activate
+ */
+self.addEventListener('activate', event => {
 	// @ts-expect-error
 	event.waitUntil(
 		caches.keys().then(async (keys) => {
@@ -18,7 +24,10 @@ self.addEventListener('activate', (event) => {
 	);
 });
 
-self.addEventListener('fetch', (event) => {
+/**
+ * Events: Fetch
+ */
+self.addEventListener('fetch', event => {
 	// @ts-expect-error
 	const { request } = event;
 
@@ -34,9 +43,7 @@ self.addEventListener('fetch', (event) => {
 	} else if (url.protocol === 'https:' || location.hostname === 'localhost') {
 		// hit the network for everything else...
 		const promise = fetch(request);
-
-		// ...and cache successful responses...
-		promise.then((response) => {
+		promise.then(response => {
 			// cache successful responses
 			if (response.ok && response.type === 'basic') {
 				const clone = response.clone();

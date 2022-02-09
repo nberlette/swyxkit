@@ -1,5 +1,4 @@
-import { SITE_TITLE } from './config/site.js';
-import { GH_USER_REPO } from './config/site.js';
+import { SITE_TITLE, GH_USER_REPO } from '$lib/config/site';
 
 /**
  * Split a string on delimiters of comma (`,`), pipe (`|`), or semicolon (`;`).
@@ -27,7 +26,7 @@ function createApiUrl(repo = GH_USER_REPO, per_page = 100) {
  * @link https://og-image.vercel.app
  * @link https://icns.ml
  * @param {string} title
- * @param {string[]} icons
+ * @param {{[key: string]: any}} options
  * @returns {string}
  */
 function createOGImageUrl(title = SITE_TITLE, {
@@ -42,7 +41,9 @@ function createOGImageUrl(title = SITE_TITLE, {
   theme = 'dark',
   code = true
 }) {
-  const euc = (str) => str.replace(/([<>\[\]/:;{}()#\s ]+|[^a-z0-9-_]+)/ig, ent => encodeURIComponent(ent));
+  const euc = (str) => str
+    .replace(/([<>\[\]/:;{}()#\s ]+|[^a-z0-9-_]+)/ig, ent =>
+      encodeURIComponent(ent));
 
   const styles = `<style>code{color:${foreground};text-shadow:0 0.1em 0 ${shadowColor}}svg,img{filter:drop-shadow(0 0.1em 0 ${shadowColor})}img:first-child,.plus,code::before,code::after{display:none}html,body{background:${background} linear-gradient(40deg, ${gradientFrom} 0%, ${gradientTo} 150%)}</style>`;
   const iconsString = icons.map(icon =>

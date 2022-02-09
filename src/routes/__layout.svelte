@@ -1,6 +1,11 @@
 <script context="module">
 	import {
 		MY_TWITTER_HANDLE,
+		SITE_TWITTER_HANDLE,
+		YOUTUBE_URL,
+		UNSPLASH_URL,
+		TWITTER_URL,
+		EMAIL,
 		MY_YOUTUBE,
 		REPO_URL,
 		SITE_TITLE,
@@ -18,7 +23,7 @@
 		rel="alternate"
 		type="application/rss+xml"
 		title={'RSS Feed for ' + SITE_TITLE}
-		href="/rss.xml"
+		href="/api/rss.xml"
 	/>
 	<meta name="theme-color" content="#facc15" media="(prefers-color-scheme: light)" />
 	<meta name="theme-color" content="#3730a3" media="(prefers-color-scheme: dark)" />
@@ -63,7 +68,7 @@
 				class="text-gray-500 transition hover:text-gray-300"
 				target="_blank"
 				rel="noopener noreferrer"
-				href={MY_YOUTUBE}
+				href={YOUTUBE_URL}
 			>
 				YouTube
 			</a>

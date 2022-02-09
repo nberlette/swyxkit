@@ -4,6 +4,7 @@
 
 	import {
 		MY_TWITTER_HANDLE,
+		SITE_TWITTER_HANDLE,
 		REPO_URL,
 		SITE_URL
 	} from '$lib/config/site';
