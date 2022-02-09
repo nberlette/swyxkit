@@ -1,11 +1,20 @@
 import { compile } from 'mdsvex';
 import { dev } from '$app/env';
+import {
+	GH_USER_REPO,
+	create_api_url,
+	BASE_URL,
+	SITE_URL,
+	ISSUES_API_URL,
+	ALLOWED_AUTHORS,
+	LABELS_PUBLISHED,
+	LABELS_DRAFT,
+} from './config/site.js';
+
 import grayMatter from 'gray-matter';
 import fetch from 'node-fetch';
-import { GH_USER_REPO } from './siteConfig';
 import parse from 'parse-link-header';
 import slugify from 'slugify';
-
 import rehypeStringify from 'rehype-stringify';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutoLink from 'rehype-autolink-headings';
@@ -23,8 +32,9 @@ const rehypePlugins = [
 	]
 ];
 
-const allowedPosters = ['sw-yx'];
-const publishedTags = ['Published'];
+const allowedPosters = [...ALLOWED_AUTHORS];
+const publishedTags = [...LABELS_PUBLISHED];
+
 let allBlogposts = [];
 // let etag = null // todo - implmement etag header
 ``;
@@ -41,7 +51,7 @@ export async function listContent() {
 	};
 	do {
 		const res = await fetch(
-			next?.url ?? `https://api.github.com/repos/${GH_USER_REPO}/issues?state=all&per_page=100`,
+			next?.url ?? ISSUES_API_URL,
 			{
 				headers: authheader
 			}
@@ -64,7 +74,8 @@ export async function listContent() {
 		const headers = parse(res.headers.get('Link'));
 		next = headers && headers.next;
 	} while (next && limit++ < 1000); // just a failsafe against infinite loop - feel free to remove
-	_allBlogposts.sort((a, b) => b.date.valueOf() - a.date.valueOf()); // use valueOf to make TS happy https://stackoverflow.com/a/60688789/1106414
+	 // use valueOf to make TS happy https://stackoverflow.com/a/60688789/1106414
+	_allBlogposts.sort((a, b) => b.date.valueOf() - a.date.valueOf());
 	allBlogposts = _allBlogposts;
 	return _allBlogposts;
 }
@@ -77,12 +88,12 @@ export async function getContent(slug) {
 		console.log('loaded ' + allBlogposts.length + ' blogposts');
 		if (!allBlogposts.length)
 			throw new Error(
-				'failed to load blogposts for some reason. check token' + process.env.GH_TOKEN
+				'failed to load blogposts for some reason. check token' + safeDisplayToken(process.env.GH_TOKEN)
 			);
 	}
 	if (!allBlogposts.length) throw new Error('no blogposts');
 	// find the blogpost that matches this slug
-	const blogpost = allBlogposts.find((post) => post.slug === slug);
+	const blogpost = allBlogposts.find((post) => post.slug.toLowerCase() === slug.toLowerCase());
 	if (blogpost) {
 		// compile it with mdsvex
 		const content = (
@@ -97,7 +108,7 @@ export async function getContent(slug) {
 
 		return { ...blogpost, content };
 	} else {
-		throw new Error('Blogpost not found for slug: ' + slug);
+		throw new Error('Post not found for slug: ' + slug);
 	}
 }
 
