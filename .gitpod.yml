@@ -23,8 +23,6 @@ gitConfig:
   commit.gpgsign: "true"
   tag.gpgsign: "true"
   init.defaultBranch: "main"
-  # alias.amend: "!git log -n 1 --pretty=tformat:%s%n%n%b | git commit -F - --amend"
-  core.excludesfile: "~/.gitconfig"
   color.ui: "auto"
   color.branch.current: "yellow reverse"
   color.branch.local: "yellow"
@@ -42,21 +40,24 @@ gitConfig:
   bash.showupstream: ""
   bash.showcolorhints: "true"
   init.defaultbranch: "main"
-  url.https://github.com.insteadOf: "github:"
   url.https://github.com/.insteadOf: "gh:"
-  url.https://gist.github.com/.insteadOf: "gist:"
-  url.https://gitlab.com.insteadOf: "gitlab:"
   url.https://gitlab.com/.insteadOf: "gl:"
-
+  url.https://bitbucket.org/.insteadOf: "bb:"
+  url.https://gist.github.com.insteadOf: "gist:"
+  url.https://github.com.insteadOf: "github:"
+  url.https://gitlab.com.insteadOf: "gitlab:"
+  url.https://bitbucket.org.insteadOf: "bitbucket:"
 vscode:
   extensions:
+    - github.copilot-nightly
+    - eamodio.gitlens
     - svelte.vscode-svelte
     - rafaelmartinez.svelte-preview
     - fivethree.vscode-svelte-snippets
     - jock.svg
     - editorconfig.editorconfig
     - dbaeumer.vscode-eslint
-    - eamodio.gitlens
+    - esbenp.prettier-vscode
     - yzhang.markdown-all-in-one
     - jacano.vscode-pnpm
     - gamunu.vscode-yarn
@@ -64,3 +65,4 @@ vscode:
     - christian-kohler.npm-intellisense
     - christian-kohler.path-intellisense
     - mrmlnc.vscode-scss
+    - voorjaar.windicss-intellisense
